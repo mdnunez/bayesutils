@@ -21,7 +21,7 @@ from scipy import stats
 def readpystan(allsamps, flatnames):  # Convert pystan output to dictionary
     """Coverts pystan output to a dictionary of variable arrays where the last
     dimension of each array is the number of chains, the second to last
-    dimension is the number of samples in each change, all other dimensions
+    dimension is the number of samples in each chain, all other dimensions
     describe the shape of the parameter
     """
 
@@ -254,7 +254,7 @@ def diagnostic(insamples):
                 within + (1. / nsamps) * between
             # Rhat (Gelman-Rubin statistic)
             temprhat = np.sqrt(totalestvar / within)
-            maxrhats[keyindx] = np.max(temprhat)
+            maxrhats[keyindx] = np.nanmax(temprhat) # Ignore NANs
             result[key]['rhat'] = temprhat
             keyindx += 1
             # Possible number of effective samples?
